@@ -168,13 +168,31 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:project,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --output text >> .circleci/ansible/inventory.txt
-      - run: |
-          ls
-          ls ..
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+
+  configure-infrastructure:
+    docker:
+      - image: cimg/python:3.8
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["e4:3a:f0:4c:00:cb:2b:a6:f6:da:f1:6c:14:b0:bf:28"]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m pip install --user ansible
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
