@@ -166,7 +166,7 @@ jobs:
           command: |
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:project,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --output text >> .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
@@ -183,7 +183,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["e4:3a:f0:4c:00:cb:2b:a6:f6:da:f1:6c:14:b0:bf:28"]
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - run:
           name: Install dependencies
           command: |
