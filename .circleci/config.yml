@@ -168,6 +168,9 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:project,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --output text >> .circleci/ansible/inventory.txt
+      - run: |
+          ls
+          ls ..
       - persist_to_workspace:
           root: ~/
           paths:
