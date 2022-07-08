@@ -9,9 +9,9 @@
     - ansible_stdout_callback: yaml
 
   pre_tasks:
-    - name: "Wait 60 seconds for target connection to become reachable/usable."
+    - name: "Wait 30 seconds for target connection to become reachable/usable."
       ansible.builtin.pause:
-        seconds: 60
+        seconds: 30
 
   environment:
     - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
