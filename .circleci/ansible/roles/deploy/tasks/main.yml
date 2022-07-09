@@ -10,5 +10,4 @@
   command: chdir=backend {{ item }}
   with_items:
     - npm install
-    - pm2 stop all
     - pm2 start npm -- start
