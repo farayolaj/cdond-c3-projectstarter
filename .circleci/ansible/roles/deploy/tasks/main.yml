@@ -6,9 +6,9 @@
 - name: Extract files
   command: tar -xf artifact.tar.gz
 
-- name: Change directory
+- name: Start server
   command: chdir=backend {{ item }}
   with_items:
     - npm install
-    - pm2 stop default
+    - pm2 stop all
     - pm2 start npm -- start
