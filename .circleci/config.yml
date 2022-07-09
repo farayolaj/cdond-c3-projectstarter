@@ -243,7 +243,7 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - run:
-          name: Get backend url
+          name: Deploy frontend objects
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
@@ -251,9 +251,6 @@ jobs:
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-      - run:
-          name: Deploy frontend objects
-          command: |
             cd frontend
             npm install
             npm run build
