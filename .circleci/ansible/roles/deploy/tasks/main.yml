@@ -4,9 +4,7 @@
     dest: ~/artifact.tar.gz
 
 - name: Extract files
-  command: |
-    cd ~
-    tar -xf artifact.tar.gz
+  command: tar -xf artifact.tar.gz
 
 - name: Run node server
   command: |
