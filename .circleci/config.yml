@@ -303,21 +303,15 @@ jobs:
 
   smoke-test:
     docker:
-      - image: mhart/alpine-node:13.8.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            apk update
-            apk upgrade
-            apk add curl unzip
       - run:
           name: Install AWS CLI
           command: |
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
-            ./aws/install
+            sudo ./aws/install
       - run:
           name: Get backend url
           command: |
