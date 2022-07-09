@@ -389,7 +389,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Remove old stacks and files
+          name: Remove old stacks
           command: |
             export OldWorkflowID=$(cat ~/old_workflow_id.txt)
             echo "Old Workflow ID: ${OldWorkflowID}"
