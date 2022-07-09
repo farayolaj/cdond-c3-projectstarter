@@ -355,6 +355,14 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - run:
+          name: Get Old Workflow ID
+          command: |
+            aws cloudformation \
+            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            --no-paginate --output text > ~/old_workflow_id.txt
+            echo "Old Workflow ID:"
+            cat ~/old_workflow_id.txt
+      - run:
           name: Update cloudfront distribution
           command: |
             aws cloudformation deploy \
@@ -362,6 +370,9 @@ jobs:
             --stack-name InitialStack \
             --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
+      - persist_to_workspace:
+          root: ~/
+          paths: [old_workflow_id.txt]
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
       - revert-migrations:
@@ -372,12 +383,12 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Remove old stacks and files
           command: |
-            export OldWorkflowID=$(aws cloudformation \
-            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-            --no-paginate --output text)
+            export OldWorkflowID=$(echo ~/old_workflow_id.txt)
             echo "Old Workflow ID: ${OldWorkflowID}"
             echo "Current Workflow ID: ${CIRCLE_WORKFLOW_ID:0:7}"
 
